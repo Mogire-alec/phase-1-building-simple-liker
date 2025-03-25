@@ -3,9 +3,33 @@ const EMPTY_HEART = '♡'
 const FULL_HEART = '♥'
 
 // Your JavaScript code goes here!
+const errorModal = document.getElementById('modal');
+errorModal.classList.add('hidden')
 
+document.addEventListener('click', (event) => {
+  if (event.target.classList.contains('list-glyoh')){
+    const heart = event.target;
 
-
+    if (heart.innerText === EMPTY_HEART){
+      mimicServerCall()
+      .then(() => {
+        heart.innerText = FULL_HEART;
+        heart.classList.add('activated-heart');
+      })
+      .catch((error) => {
+        errorModal.classList.remove('hidden');
+        const errorMessage = errorModal.querySelector('#modal-message')
+        errorMessage.innerText = error;
+        setTimeout(() => {
+          errorModal.classList.add('hidden');
+        }, 3000);
+      });
+    } else {
+      heart.innerText = EMPTY_HEART;
+      heart.classList.remove('activated-heart');
+    }
+  }
+})
 
 //------------------------------------------------------------------------------
 // Don't change the code below: this function mocks the server response
